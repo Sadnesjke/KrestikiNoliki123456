@@ -5,26 +5,51 @@ namespace KrestikiNoliki123456
     class Program
     {
         static char[,] board = new char[3, 3];
-        static char currentPlayer = 'X';
+        static char player1Symbol;
+        static char player2Symbol;
+        static char currentPlayer;
+        static int scorePlayer1 = 0;
+        static int scorePlayer2 = 0;
 
         static void Main(string[] args)
         {
-            Console.WriteLine("=== КРЕСТИКИ-НОЛИКИ ===");
-            Console.WriteLine("Первая версия");
+            Console.WriteLine("=== КРЕСТИКИ-НОЛИКИ v2.0 ===");
+            Console.WriteLine("Счётчик побед + кастомизация");
             Console.WriteLine("Автор: Диянов Даниил Сергеевич");
             Console.WriteLine("Используйте номера строк и столбцов от 1 до 3");
             Console.WriteLine();
 
-            StartGame();
+            Console.Write("Введите символ для первого игрока (Enter = X): ");
+            string input = Console.ReadLine();
+            player1Symbol = string.IsNullOrEmpty(input) ? 'X' : input[0];
+
+            Console.Write("Введите символ для второго игрока (Enter = O): ");
+            input = Console.ReadLine();
+            player2Symbol = string.IsNullOrEmpty(input) ? 'O' : input[0];
+
+            Console.WriteLine();
+
+            while (true)
+            {
+                PlayRound();
+
+                Console.WriteLine($"СЧЁТ: {player1Symbol} = {scorePlayer1}  |  {player2Symbol} = {scorePlayer2}");
+                Console.Write("Хотите сыграть ещё? (y/n): ");
+                if (Console.ReadLine().ToLower() != "y")
+                    break;
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Игра завершена. Спасибо!");
         }
 
-        static void StartGame()
+        static void PlayRound()
         {
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
                     board[i, j] = ' ';
 
-            currentPlayer = 'X';
+            currentPlayer = player1Symbol;
 
             while (true)
             {
@@ -50,6 +75,11 @@ namespace KrestikiNoliki123456
                 {
                     PrintBoard();
                     Console.WriteLine($"Игрок {currentPlayer} победил!");
+
+                    if (currentPlayer == player1Symbol)
+                        scorePlayer1++;
+                    else
+                        scorePlayer2++;
                     break;
                 }
 
@@ -60,7 +90,7 @@ namespace KrestikiNoliki123456
                     break;
                 }
 
-                currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+                currentPlayer = (currentPlayer == player1Symbol) ? player2Symbol : player1Symbol;
             }
         }
 
